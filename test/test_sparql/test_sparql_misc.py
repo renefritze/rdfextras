@@ -95,7 +95,7 @@ class TestSimpleQueries(unittest.TestCase):
         SELECT ?x ?name
         WHERE  { ?x foaf:name ?name }
         """))
-        col1, col2 = zip(*results)
+        col1, col2 = list(zip(*results))
         col1 = sorted(col1)
         col2 = sorted(col2)
 

@@ -1,7 +1,7 @@
 from rdflib import plugin
 from rdflib.graph import ConjunctiveGraph
 from rdflib.store import Store
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import rdflib
@@ -33,7 +33,7 @@ class TestRegex(unittest.TestCase):
         graph = ConjunctiveGraph(plugin.get('IOMemory',Store)())
         graph.parse(StringIO(test_data), format="n3")
         results = graph.query(test_query)
-        self.failUnless(len([a for a in results if 'a' in a[0] or 'A' in a[0]]) == 3)
+        self.assertTrue(len([a for a in results if 'a' in a[0] or 'A' in a[0]]) == 3)
 
 if __name__ == "__main__":
     unittest.main()

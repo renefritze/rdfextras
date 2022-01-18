@@ -36,7 +36,7 @@ def Op_to_RoutineDoc(op, routine_doc, module_name=None):
 
         # Set the routine's line number.
         if hasattr(func, 'func_code'):
-            routine_doc.lineno = func.func_code.co_firstlineno
+            routine_doc.lineno = func.__code__.co_firstlineno
     else:
         # [XX] I should probably use UNKNOWN here??
         # dvarrazzo: if '...' is to be changed, also check that
@@ -65,27 +65,27 @@ if __name__ == '__main__':
     options = defaultdict(bool)
     options.update(dict([x, y or True] for x, y in getopt.getopt(sys.argv[1:], 'o:', ['epydoc', 'rst', 'help', 'nopdf'])[0]))
     if options['--help']:
-        print 'Usage: %s [OPTIONS]' % sys.argv[0]
-        print '  -o <dir>: output the html files in the specified dir'
-        print '  --rst: only compile the doc (requires sphinx)'
-        print '  --nopdf: do not produce a PDF file from the doc, only HTML'
-        print '  --epydoc: only compile the api documentation (requires epydoc)'
-        print '  --help: this help'
+        print('Usage: %s [OPTIONS]' % sys.argv[0])
+        print('  -o <dir>: output the html files in the specified dir')
+        print('  --rst: only compile the doc (requires sphinx)')
+        print('  --nopdf: do not produce a PDF file from the doc, only HTML')
+        print('  --epydoc: only compile the api documentation (requires epydoc)')
+        print('  --help: this help')
         sys.exit(0)
 
     options['--all'] = not (bool(options['--epydoc']) ^ bool(options['--rst']))
 
     if 0:
         import gen_oplist
-        print 'Generating oplist...'
+        print('Generating oplist...')
         gen_oplist.print_file(open('%s/doc/indexes/oplist.txt' % throot, 'w'))
-        print 'oplist done!'
+        print('oplist done!')
 
     if 0:
         import gen_typelist
-        print 'Generating typelist...'
+        print('Generating typelist...')
         gen_typelist.print_file(open('%s/doc/indexes/typelist.txt' % throot, 'w'))
-        print 'typelist done!'
+        print('typelist done!')
 
     def mkdir(path):
         try:
@@ -137,10 +137,10 @@ if __name__ == '__main__':
                 shutil.copy(os.path.join(workdir, 'theano.pdf'), outdir)
                 os.chdir(outdir)
                 shutil.rmtree(workdir)
-            except OSError, e:
-                print 'OSError:', e
-            except IOError, e:
-                print 'IOError:', e
+            except OSError as e:
+                print('OSError:', e)
+            except IOError as e:
+                print('IOError:', e)
 
 
 

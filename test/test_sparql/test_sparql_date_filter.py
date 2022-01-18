@@ -1,6 +1,6 @@
 from rdflib import ConjunctiveGraph, URIRef
 from nose.exc import SkipTest
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import rdflib
@@ -22,7 +22,7 @@ testContent = """
   a foaf:Document;
   dc:date "1990-01-01T12:45:00"^^xsd:dateTime."""
     
-QUERY1 = u"""
+QUERY1 = """
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX   dc: <http://purl.org/dc/elements/1.1/>
 PREFIX  xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -33,7 +33,7 @@ WHERE {
     FILTER (?date < xsd:dateTime("2006-01-01T00:00:00") && 
             ?date > xsd:dateTime("1995-06-15T00:00:00")) }"""
 
-QUERY2 = u"""
+QUERY2 = """
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX   dc: <http://purl.org/dc/elements/1.1/>
 PREFIX  xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -44,7 +44,7 @@ WHERE {
     FILTER (?date < "2006-01-01T00:00:00" && 
             ?date > "1995-06-15T00:00:00") }"""
 
-QUERY3 = u"""
+QUERY3 = """
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX   dc: <http://purl.org/dc/elements/1.1/>
 PREFIX  xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -74,7 +74,7 @@ class DateFilterTest(unittest.TestCase):
                                        processor="sparql",
                                        DEBUG=False)
             results = list(results)
-            self.failUnless(
+            self.assertTrue(
                 len(results) and results == [(ANSWER1,)],
                 "expecting : %s .  Got: %s"%([(ANSWER1,)],repr(results)))
 

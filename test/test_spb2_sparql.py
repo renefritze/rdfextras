@@ -84,7 +84,7 @@ def generictest(e):
             res = result.result
     else:
         res = []
-    print("Q%s\t%s\t%fs" % (e.file[9:-7], len(res), t2-t1))
+    print(("Q%s\t%s\t%fs" % (e.file[9:-7], len(res), t2-t1)))
 
 
 def test_cases():

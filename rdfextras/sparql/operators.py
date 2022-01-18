@@ -38,7 +38,7 @@ from rdfextras.sparql import _questChar, Debug
 # We replace str with a custom function below. This messes things up after
 # 2to3 conversion, which replaces basestring with str. At some point, we should
 # clean this up properly - i.e. don't override the builtin str.
-str_ = basestring
+str_ = str
 
 def queryString(v):
     """
@@ -84,7 +84,7 @@ def getValue(param):
             else:
                 value = param
 
-            return lambda(bindings): value
+            return lambda bindings: value
 
     def f(bindings):
         if unBound:
@@ -357,7 +357,7 @@ def str(a):
             if val == None:
                 return ""
             else:
-                from __builtin__ import str as _str
+                from builtins import str as _str
                 return _str(val)
         except:
             return ""
@@ -640,8 +640,8 @@ def regex(item, pattern, flag=None):
     def f(bindings):
         try:
             return bool(re.compile(a(bindings)).search(b(bindings)))
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             return False
     return f
 
@@ -684,10 +684,10 @@ def EBV(a):
                 return ebv
 
             else:
-                print rt, type(rt)
+                print(rt, type(rt))
                 raise
 
-        except Exception, e:
+        except Exception as e:
             if isinstance(e, KeyError):
                 # see: http://www.w3.org/TR/rdf-sparql-query/#ebv
                 raise TypeError("http://www.w3.org/TR/rdf-sparql-query/#ebv")

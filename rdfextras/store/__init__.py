@@ -126,13 +126,14 @@ class Store(object):
         pass
 
     #RDF APIs
-    def add(self, (subject, predicate, object), context, quoted=False):
+    def add(self, xxx_todo_changeme, context, quoted=False):
         """
         Adds the given statement to a specific context or to the model. The quoted argument
         is interpreted by formula-aware stores to indicate this statement is quoted/hypothetical
         It should be an error to not specify a context and have the quoted argument be True.
         It should also be an error for the quoted argument to be True when the store is not formula-aware.
         """
+        (subject, predicate, object) = xxx_todo_changeme
         self.dispatcher.dispatch(TripleAddedEvent(triple=(subject, predicate, object), context=context))
 
     def addN(self, quads):
@@ -148,17 +149,19 @@ class Store(object):
                      c
             )
 
-    def remove(self, (subject, predicate, object), context=None):
+    def remove(self, xxx_todo_changeme1, context=None):
         """ Remove the set of triples matching the pattern from the store """
+        (subject, predicate, object) = xxx_todo_changeme1
         self.dispatcher.dispatch(TripleRemovedEvent(triple=(subject, predicate, object), context=context))
 
-    def triples_choices(self, (subject, predicate, object_),context=None):
+    def triples_choices(self, xxx_todo_changeme2,context=None):
         """
         A variant of triples that can take a list of terms instead of a single
         term in any slot.  Stores can implement this to optimize the response time
         from the default 'fallback' implementation, which will iterate
         over each term in the list and dispatch to tripless
         """
+        (subject, predicate, object_) = xxx_todo_changeme2
         if isinstance(object_,list):
             assert not isinstance(subject,list), "object_ / subject are both lists"
             assert not isinstance(predicate,list), "object_ / predicate are both lists"
@@ -190,7 +193,7 @@ class Store(object):
                 for (s1, p1, o1), cg in self.triples((subject,None,object_),context):
                         yield (s1, p1, o1), cg
 
-    def triples(self, (subject, predicate, object), context=None):
+    def triples(self, xxx_todo_changeme3, context=None):
         """
         A generator over all the triples matching the pattern. Pattern can
         include any objects for used for comparing against nodes in the store, for
@@ -199,6 +202,7 @@ class Store(object):
         A conjunctive query can be indicated by either providing a value of None
         for the context or the identifier associated with the Conjunctive Graph (if it's context aware).
         """
+        (subject, predicate, object) = xxx_todo_changeme3
         pass
 
     # variants of triples will be done if / when optimization is needed

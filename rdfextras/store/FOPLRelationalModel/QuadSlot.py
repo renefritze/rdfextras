@@ -56,12 +56,12 @@ def genQuadSlots(quads, useSignedInts=False):
 
 def normalizeValue(value, termType, useSignedInts=False):
     if value is None:
-        value = u'http://www.w3.org/2002/07/owl#NothingU'
+        value = 'http://www.w3.org/2002/07/owl#NothingU'
     else:
         value = (isinstance(value, Graph) \
                         and value.identifier or str(value.encode('utf-8'))) + termType
     unsigned_hash = int(md5(
-                      isinstance(value, unicode) and value.encode('utf-8')
+                      isinstance(value, str) and value.encode('utf-8')
                                                  or value)
                     .hexdigest()[:16], 16)
     if useSignedInts:

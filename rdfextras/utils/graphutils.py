@@ -11,7 +11,7 @@ def graph_to_dot(graph, dot):
     nodes = {}
     for s, o in graph.subject_objects():
         for i in s,o:
-            if i not in nodes.keys():
+            if i not in list(nodes.keys()):
                 nodes[i] = i
     for s, p, o in graph.triples((None,None,None)):
         dot.add_edge(pydot.Edge(nodes[s], nodes[o], label=p))

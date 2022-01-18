@@ -54,8 +54,8 @@ class TestSPARQLQueryinitNs(unittest.TestCase):
                     (None, RDF['type'], OWL['NamedIndividual'])) ])
 
     def testnoprefix(self):
-        ns = {u'owl':Namespace("http://www.w3.org/2002/07/owl#"),
-              u'rdf':Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")}
+        ns = {'owl':Namespace("http://www.w3.org/2002/07/owl#"),
+              'rdf':Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")}
         got = set([ x for (x,) in self.graph.query(q, initNs=ns, DEBUG=True)])
         assert self.expect == got, (self.expect, got)
 

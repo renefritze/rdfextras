@@ -12,7 +12,7 @@ except ImportError:
         return dec
 
 def cast_bytes(s, enc='utf-8'):
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         return s.encode(enc)
     return s
 

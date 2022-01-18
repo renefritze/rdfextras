@@ -1,5 +1,5 @@
 from rdflib.graph import ConjunctiveGraph
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import rdflib
@@ -42,7 +42,7 @@ test_material['optional'] = (PROLOGUE+"""
             OPTIONAL { ?x foaf:knows ?friend . }
     }
     """,
-    {u'head': {u'vars': [u'name', u'x', u'friend']}, u'results': { u'bindings': [{u'x': {u'type': u'uri', u'value': u'http://example.org/alice'}, u'name': { u'type': u'literal', u'value': u'Alice'}, u'friend': {u'type': u'uri', u'value': u'http://example.org/bob'}}, {u'x': {u'type': u'uri', u'value': u'http://example.org/bob'}, u'name': { u'type': u'literal', u'value': u'Bob'}}], }} 
+    {'head': {'vars': ['name', 'x', 'friend']}, 'results': { 'bindings': [{'x': {'type': 'uri', 'value': 'http://example.org/alice'}, 'name': { 'type': 'literal', 'value': 'Alice'}, 'friend': {'type': 'uri', 'value': 'http://example.org/bob'}}, {'x': {'type': 'uri', 'value': 'http://example.org/bob'}, 'name': { 'type': 'literal', 'value': 'Bob'}}], }} 
     )
 
 test_material['select_vars'] = (PROLOGUE+"""
@@ -50,19 +50,19 @@ test_material['select_vars'] = (PROLOGUE+"""
     WHERE { ?x foaf:name ?name .
             OPTIONAL { ?x foaf:knows ?friend . }
     }""",
-    {u'head': {u'vars': [u'name', u'friend']}, u'results': { u'bindings': [{u'name': { u'type': u'literal', u'value': u'Bob'}}, {u'name': { u'type': u'literal', u'value': u'Alice'}, u'friend': {u'type': u'uri', u'value': u'http://example.org/bob'}}], }} 
+    {'head': {'vars': ['name', 'friend']}, 'results': { 'bindings': [{'name': { 'type': 'literal', 'value': 'Bob'}}, {'name': { 'type': 'literal', 'value': 'Alice'}, 'friend': {'type': 'uri', 'value': 'http://example.org/bob'}}], }} 
     )
 
 test_material['wildcard'] = (PROLOGUE+"""
     SELECT * WHERE { ?x foaf:name ?name . }
     """,
-    {u'head': {u'vars': [u'x', u'name']}, u'results': { u'bindings': [{u'x': {u'type': u'uri', u'value': u'http://example.org/bob'}, u'name': { u'type': u'literal', u'value': u'Bob'}}, {u'x': {u'type': u'uri', u'value': u'http://example.org/alice'}, u'name': { u'type': u'literal', u'value': u'Alice'}}], }} 
+    {'head': {'vars': ['x', 'name']}, 'results': { 'bindings': [{'x': {'type': 'uri', 'value': 'http://example.org/bob'}, 'name': { 'type': 'literal', 'value': 'Bob'}}, {'x': {'type': 'uri', 'value': 'http://example.org/alice'}, 'name': { 'type': 'literal', 'value': 'Alice'}}], }} 
     )
 
 test_material['wildcard_vars'] = (PROLOGUE+"""
     SELECT * WHERE { ?x foaf:name ?name . }
     """,
-    {u'head': {u'vars': [u'x', u'name']}, u'results': { u'bindings': [{u'x': {u'type': u'uri', u'value': u'http://example.org/alice'}, u'name': { u'type': u'literal', u'value': u'Alice'}}, {u'x': {u'type': u'uri', u'value': u'http://example.org/bob'}, u'name': { u'type': u'literal', u'value': u'Bob'}}], }} 
+    {'head': {'vars': ['x', 'name']}, 'results': { 'bindings': [{'x': {'type': 'uri', 'value': 'http://example.org/alice'}, 'name': { 'type': 'literal', 'value': 'Alice'}}, {'x': {'type': 'uri', 'value': 'http://example.org/bob'}, 'name': { 'type': 'literal', 'value': 'Bob'}}], }} 
     )
 
 test_material['union'] = (PROLOGUE+"""
@@ -70,7 +70,7 @@ test_material['union'] = (PROLOGUE+"""
                 { <http://example.org/alice> foaf:name ?name . } UNION { <http://example.org/bob> foaf:name ?name . }
     }
     """,
-    {u'head': {u'vars': [u'name']}, u'results': { u'bindings': [{u'name': { u'type': u'literal', u'value': u'Bob'}}, {u'name': { u'type': u'literal', u'value': u'Alice'}}], }} 
+    {'head': {'vars': ['name']}, 'results': { 'bindings': [{'name': { 'type': 'literal', 'value': 'Bob'}}, {'name': { 'type': 'literal', 'value': 'Alice'}}], }} 
     )
 
 test_material['union3'] = (PROLOGUE+"""
@@ -80,7 +80,7 @@ test_material['union3'] = (PROLOGUE+"""
                 UNION { <http://example.org/nobody> foaf:name ?name . }
     }
             """, 
-    {u'head': {u'vars': [u'name']}, u'results': { u'bindings': [{u'name': { u'type': u'literal', u'value': u'Bob'}}, {u'name': { u'type': u'literal', u'value': u'Alice'}}], }}
+    {'head': {'vars': ['name']}, 'results': { 'bindings': [{'name': { 'type': 'literal', 'value': 'Bob'}}, {'name': { 'type': 'literal', 'value': 'Alice'}}], }}
     )
 
 
@@ -111,7 +111,7 @@ class TestSparqlJsonResults(unittest.TestCase):
         result_bindings = sorted(result_json["results"]["bindings"], key=repr)
         correct_bindings = sorted(correct["results"]["bindings"], key=repr)
         msg = "Expected:\n %s \n- to contain:\n%s" % (result_bindings, correct_bindings)
-        self.failUnless(result_bindings==correct_bindings, msg)
+        self.assertTrue(result_bindings==correct_bindings, msg)
 
     testOptional = make_method('optional')
 

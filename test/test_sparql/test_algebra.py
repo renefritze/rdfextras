@@ -4,6 +4,7 @@ from rdflib.graph import ReadOnlyGraphAggregate
 from rdflib.store import Store
 from rdfextras.sparql.components import Prolog
 from rdfextras.sparql.algebra import ReduceToAlgebra, TopEvaluate, GraphExpression
+from functools import reduce
 
 TEST1="BASE <http://example.com/> SELECT * WHERE { ?s :p1 ?v1 ; :p2 ?v2 }"
 #BGP( ?s :p1 ?v1 .?s :p2 ?v2 )
@@ -163,14 +164,14 @@ class TestSPARQLAlgebra(unittest.TestCase):
         global prolog
         prolog = p.prolog
         if prolog is None:
-            prolog = Prolog(u'',[])
+            prolog = Prolog('',[])
             prolog.DEBUG = True
         rt = TopEvaluate(p,self.unionGraph,passedBindings = {},DEBUG=False)
         rt = SPARQLQueryResult(rt).serialize()#format='python')
         # print("Len rt", len(rt))
-        self.failUnless(len(rt) == 1,"Expected 1 item solution set")
+        self.assertTrue(len(rt) == 1,"Expected 1 item solution set")
         for ppd in rt:
-            self.failUnless(ppd == URIRef('http://example.org/foaf/aliceFoaf'),
+            self.assertTrue(ppd == URIRef('http://example.org/foaf/aliceFoaf'),
                             "Unexpected ?mbox binding :\n %s" % ppd)
 
     def testExpressions(self):
@@ -181,10 +182,10 @@ class TestSPARQLAlgebra(unittest.TestCase):
             prolog = p.prolog
             p = p.query.whereClause.parsedGraphPattern.graphPatterns
             if prolog is None:
-                prolog = Prolog(u'',[])
+                prolog = Prolog('',[])
             if not hasattr(prolog,'DEBUG'):                
                 prolog.DEBUG = False
-            self.assertEquals(repr(reduce(ReduceToAlgebra,p,None)),outExpr)
+            self.assertEqual(repr(reduce(ReduceToAlgebra,p,None)),outExpr)
 
     def testSimpleGraphPattern(self):
         from rdfextras.sparql.parser import parse
@@ -193,7 +194,7 @@ class TestSPARQLAlgebra(unittest.TestCase):
         prolog = p.prolog
         p = p.query.whereClause.parsedGraphPattern.graphPatterns
         if prolog is None:
-            prolog = Prolog(u'',[])
+            prolog = Prolog('',[])
             prolog.DEBUG = True
         assert isinstance(reduce(ReduceToAlgebra,p,None),GraphExpression)
 
@@ -206,11 +207,11 @@ class TestSPARQLAlgebra(unittest.TestCase):
         from rdfextras.sparql.query import SPARQLQueryResult
         rt = SPARQLQueryResult(rt).serialize()#format='python')
         # print("Len rt", len(rt))
-        self.failUnless(len(rt) == 1,"Expected 1 item solution set")
+        self.assertTrue(len(rt) == 1,"Expected 1 item solution set")
         for mbox,nick,ppd in rt:
-            self.failUnless(mbox == URIRef('mailto:bob@work.example'),
+            self.assertTrue(mbox == URIRef('mailto:bob@work.example'),
                             "Unexpected ?mbox binding :\n %s" % mbox)
-            self.failUnless(nick  == Literal("Robert"),
+            self.assertTrue(nick  == Literal("Robert"),
                             "Unexpected ?nick binding :\n %s" % nick)
-            self.failUnless(ppd == URIRef('http://example.org/foaf/bobFoaf'),
+            self.assertTrue(ppd == URIRef('http://example.org/foaf/bobFoaf'),
                             "Unexpected ?ppd binding :\n %s" % ppd)

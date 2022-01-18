@@ -234,7 +234,7 @@ def _isResQuest(r):
     :rtype:   Boolean
     """
 
-    if r and isinstance(r, basestring) and r[0] == _questChar:
+    if r and isinstance(r, str) and r[0] == _questChar:
         return True
 
     return False
@@ -401,7 +401,7 @@ class GraphPattern:
 
         """
 
-        for i in xrange(len(lst) -1, -1, -1):
+        for i in range(len(lst) -1, -1, -1):
             self.insertPattern(lst[i])
 
     def addConstraint(self, func):
@@ -564,7 +564,7 @@ class BasicGraphPattern(GraphPattern):
             if self.prolog is not None:
                 namespace_manager = NamespaceManager(Graph())
 
-                for prefix,uri in self.prolog.prefixBindings.items():
+                for prefix,uri in list(self.prolog.prefixBindings.items()):
                     namespace_manager.bind(prefix, uri, override=False)
 
                 try:
@@ -575,7 +575,7 @@ class BasicGraphPattern(GraphPattern):
                 if prefix not in self.prolog.prefixBindings:
                     return term
                 else:
-                    return u':'.join([prefix, localName])
+                    return ':'.join([prefix, localName])
 
             else:
                 return term
@@ -676,5 +676,5 @@ if __name__ == '__main__':
     u1 = Unbound("a")
     g = BasicGraphPattern(
         [("a","?b",24), ("?r","?c",12345), (v1,"?c",3333), (u1,"?c",9999)])
-    print g
+    print(g)
 

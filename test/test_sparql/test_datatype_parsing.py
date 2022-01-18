@@ -1,5 +1,5 @@
 import unittest
-from StringIO import StringIO
+from io import StringIO
 
 from rdflib.graph import ConjunctiveGraph
 from rdflib.term import Literal
@@ -23,7 +23,7 @@ class TestSparqlOPT_FILTER(unittest.TestCase):
     def test_OPT_FILTER(self):
         xd3Objs = [o for o in self.graph.objects(subject=exNS.xd3, 
                                                  predicate=exNS.p)]
-        self.failUnless(xd3Objs[0].datatype == XSD.double,
+        self.assertTrue(xd3Objs[0].datatype == XSD.double,
                 "Expecting %r, got instead : %r"%(double1, xd3Objs[0]))
 
 if __name__ == "__main__":

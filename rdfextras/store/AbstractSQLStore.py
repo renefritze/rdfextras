@@ -1,5 +1,6 @@
 from rdflib.term import BNode, URIRef, Literal
 from rdflib.namespace import RDF
+from functools import reduce
 try:
     from hashlib import sha1
 except ImportError:
@@ -218,13 +219,13 @@ class SQLGenerator:
         """
         # print("SQLGenerator", qStr,params)
         if not params:
-            cursor.execute(unicode(qStr))
+            cursor.execute(str(qStr))
         elif paramList:
             raise Exception("Not supported!")
         else:
-            params = tuple([not isinstance(item,int) and u"'%s'" % item or item
+            params = tuple([not isinstance(item,int) and "'%s'" % item or item
                                 for item in params])
-            querystr = unicode(qStr).replace('"',"'")
+            querystr = str(qStr).replace('"',"'")
             cursor.execute(querystr%params)
 
     # FIXME:  This *may* prove to be a performance bottleneck and should
@@ -243,8 +244,8 @@ class SQLGenerator:
         else:
             #   Commence unicode black magic
             import types
-            if not isinstance(cmd, types.UnicodeType):
-                cmd = unicode(cmd, 'ascii')
+            if not isinstance(cmd, str):
+                cmd = str(cmd, 'ascii')
             return cmd.encode('utf-8')
 
     def normalizeTerm(self, term):
@@ -502,8 +503,9 @@ class AbstractSQLStore(Store, SQLGenerator):
             pass
 
     # Triple Methods
-    def add(self, (subject, predicate, obj), context=None, quoted=False):
+    def add(self, xxx_todo_changeme, context=None, quoted=False):
         """ Add a triple to the store of triples. """
+        (subject, predicate, obj) = xxx_todo_changeme
         c = self._db.cursor()
         if self.autocommit_default:
             c.execute("""SET AUTOCOMMIT=0""")
@@ -567,8 +569,9 @@ class AbstractSQLStore(Store, SQLGenerator):
 
         c.close()
 
-    def remove(self, (subject, predicate, obj), context):
+    def remove(self, xxx_todo_changeme1, context):
         """ Remove a triple from the store """
+        (subject, predicate, obj) = xxx_todo_changeme1
         if context is not None:
             if subject is None and predicate is None and object is None:
                 self._remove_context(context)
@@ -634,7 +637,7 @@ class AbstractSQLStore(Store, SQLGenerator):
             self.executeSQL(c, self._normalizeSQLCmd(cmd), params)
         c.close()
 
-    def triples(self, (subject, predicate, obj), context=None):
+    def triples(self, xxx_todo_changeme2, context=None):
         """
         A generator over all the triples matching pattern. Pattern can
         be any objects for comparing against nodes in the store, for
@@ -650,6 +653,7 @@ class AbstractSQLStore(Store, SQLGenerator):
         FIXME:  These union all selects *may* be further optimized by joins
 
         """
+        (subject, predicate, obj) = xxx_todo_changeme2
         quoted_table = "%s_quoted_statements" % self._internedId
         asserted_table = "%s_asserted_statements" % self._internedId
         asserted_type_table = "%s_type_statements" % self._internedId
@@ -788,13 +792,14 @@ class AbstractSQLStore(Store, SQLGenerator):
 
             yield (s, p, o), (c for c in contexts)
 
-    def triples_choices(self, (subject, predicate, object_),context=None):
+    def triples_choices(self, xxx_todo_changeme3,context=None):
         """
         A variant of triples that can take a list of terms instead of a single
         term in any slot.  Stores can implement this to optimize the response time
         from the import default 'fallback' implementation, which will iterate
         over each term in the list and dispatch to tripless
         """
+        (subject, predicate, object_) = xxx_todo_changeme3
         if isinstance(object_, list):
             assert not isinstance(subject, list), "object_ / subject are both lists"
             assert not isinstance(predicate, list), "object_ / predicate are both lists"
@@ -1165,7 +1170,7 @@ class AbstractSQLStore(Store, SQLGenerator):
         """
         raise Exception("Not implemented")
 
-    def value(self, subject, predicate=u'http://www.w3.org/1999/02/22-rdf-syntax-ns#value', object=None, default=None, any=False):
+    def value(self, subject, predicate='http://www.w3.org/1999/02/22-rdf-syntax-ns#value', object=None, default=None, any=False):
         """
         Get a value for a subject/predicate, predicate/object, or
         subject/object pair -- exactly one of subject, predicate,

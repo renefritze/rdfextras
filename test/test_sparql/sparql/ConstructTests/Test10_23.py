@@ -19,7 +19,7 @@ from rdfextras.sparql.sparqlOperators import lt, ge
 import datetime
 from rdfextras.sparql.graphPattern import GraphPattern
 
-thresholdDate = datetime.date(2005,01,01)
+thresholdDate = datetime.date(2005,0o1,0o1)
 rdfData = """<?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF
    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"

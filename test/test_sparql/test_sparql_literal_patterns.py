@@ -1,7 +1,7 @@
 #=======================================================================
 from rdflib import ConjunctiveGraph
 from rdflib import URIRef
-from StringIO import StringIO
+from io import StringIO
 
 #=======================================================================
 

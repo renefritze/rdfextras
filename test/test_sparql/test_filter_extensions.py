@@ -6,8 +6,8 @@ import rdflib
 
 
 
-DC = Namespace(u"http://purl.org/dc/elements/1.1/")
-FUNC = Namespace(u"http://example.org/functions#")
+DC = Namespace("http://purl.org/dc/elements/1.1/")
+FUNC = Namespace("http://example.org/functions#")
 
 
 graph = ConjunctiveGraph()
@@ -18,7 +18,7 @@ graph.add((BNode(), RDF.value, Literal(3)))
 
 from rdflib.term import _toPythonMapping
 NUMERIC_TYPES = [type_uri for type_uri in _toPythonMapping if \
-                 _toPythonMapping[type_uri] in (int, float, long)]
+                 _toPythonMapping[type_uri] in (int, float, int)]
 
 def func_even(a):
     # Should this be required, or be done automatically?

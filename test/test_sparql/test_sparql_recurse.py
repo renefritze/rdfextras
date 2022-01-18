@@ -1,6 +1,6 @@
 
 from rdflib import ConjunctiveGraph, URIRef, Literal
-from StringIO import StringIO
+from io import StringIO
 import unittest
 import nose
 

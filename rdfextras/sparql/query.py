@@ -1,4 +1,5 @@
 import warnings
+from functools import reduce
 
 try:
     set
@@ -15,7 +16,7 @@ from rdfextras.sparql.components import Prolog
 from rdfextras.sparql.graph import SPARQLGraph
 from rdfextras.sparql.graph import GraphPattern
 
-SPARQL_XML_NAMESPACE = u'http://www.w3.org/2005/sparql-results#'
+SPARQL_XML_NAMESPACE = 'http://www.w3.org/2005/sparql-results#'
 
 
 try:
@@ -57,14 +58,14 @@ def _checkOptionals(pattern, optionals):
     :param optionals: a :class:`~rdfextras.sparql.graph.GraphPattern`
     :raise SPARQLError: if the requirement is not fulfilled
     """
-    for i in xrange(0, len(optionals)):
+    for i in range(0, len(optionals)):
         for c in optionals[i].unbounds:
             if c in pattern.unbounds:
                 # this is fine, an optional query variable can appear in the
                 # main pattern, too
                 continue
             if i > 0:
-                for j in xrange(0, i):
+                for j in range(0, i):
                     if c in optionals[j].unbounds:
                         # This means that:
                         #   - the variable is not in the main pattern (because
@@ -86,7 +87,7 @@ def _variablesToArray(variables, name=''):
         returns None (this corresponds to the wildcard in SPARQL)
     :param name: the string to be used in the error message
     """
-    if isinstance(variables,basestring):
+    if isinstance(variables,str):
         if variables == "*":
             return None
         else:
@@ -98,7 +99,7 @@ def _variablesToArray(variables, name=''):
     elif type(variables) == list or type(variables) == tuple:
         retval = []
         for s in variables:
-            if isinstance(s, basestring):
+            if isinstance(s, str):
                 retval.append(s)
             elif isinstance(s, Variable):
                 retval.append(s)
@@ -252,7 +253,7 @@ class _SPARQLNode(object):
         self.optionalTrees = []
         self.dontSpawn = False
 
-        if None in bindings.values():
+        if None in list(bindings.values()):
             self.bound = False
         else:
             self.bound = True
@@ -335,7 +336,7 @@ class _SPARQLNode(object):
         return "<SPARQLNode %s. %s children, %s OPTs.  clash: %s. bound: %s>" % (
                 id(self), len(self.children), len(self.optionalTrees), self.clash,
                 [k for k in
-                    self.bindings.keys() if self.bindings[k] is not None]
+                    list(self.bindings.keys()) if self.bindings[k] is not None]
                 )
 
     def setupGraph(self, store):
@@ -496,7 +497,7 @@ class _SPARQLNode(object):
         :param r: string
         :return: returns None if no bindings occured yet, the binding otherwise
         """
-        if isinstance(r, basestring) and not isinstance(r, Identifier) \
+        if isinstance(r, str) and not isinstance(r, Identifier) \
               or isinstance(r, Variable):
 
             if self.bindings[r] == None:
@@ -661,13 +662,13 @@ class _SPARQLNode(object):
         if self.queryProlog.eagerLimit is not None:
 
             if self.queryProlog.DEBUG:
-                print "Checking for eager termination.  No. of top-level answers: ", len(self.queryProlog.answerList)
+                print("Checking for eager termination.  No. of top-level answers: ", len(self.queryProlog.answerList))
                 from pprint import pprint
                 pprint(self.queryProlog.answerList)
 
             if len(self.queryProlog.answerList) >= self.queryProlog.eagerLimit:
                 if self.queryProlog.DEBUG:
-                    print "Reached eager termination!"
+                    print("Reached eager termination!")
                 # We've reached the LIMIT so halt processing
                 raise EnoughAnswers()
 
@@ -1113,7 +1114,7 @@ class Query:
             maxKeys = []
 
             for bound in _fetchBoundLeaves(self.top):
-                maxKeys.extend(bound.bindings.keys())
+                maxKeys.extend(list(bound.bindings.keys()))
 
             return list2set(maxKeys)
 
@@ -1155,13 +1156,13 @@ class Query:
             oDir = None # this is just to fool the interpreter's error message
 
             if orderDirection is None :
-                oDir = [True for i in xrange(0, len(orderKeys))]
+                oDir = [True for i in range(0, len(orderKeys))]
 
-            elif type(orderDirection) is types.BooleanType:
+            elif type(orderDirection) is bool:
                 oDir = [orderDirection]
 
-            elif type(orderDirection) is not types.ListType \
-                and type(orderDirection) is not types.TupleType:
+            elif type(orderDirection) is not list \
+                and type(orderDirection) is not tuple:
                 raise SPARQLError(
                     "'orderDirection' argument must be a list")
 
@@ -1179,7 +1180,7 @@ class Query:
                 The to-be-compared data are dictionaries of bindings.
                 """
 
-                for i in xrange(0, len(orderKeys)):
+                for i in range(0, len(orderKeys)):
 					# each key has to be compared separately. If there is a
                     # clear comparison result on that key then we are done,
                     # but when that is not the case, the next in line should
@@ -1261,7 +1262,7 @@ class Query:
                 if orderBy != None:
                     retval = []
 
-                    for i in xrange(0, len(lst)):
+                    for i in range(0, len(lst)):
                         v = lst[i]
                         skip = False
 
@@ -1281,11 +1282,11 @@ class Query:
         # Select may be a single query string, or an array/tuple thereof
         selectionF = _variablesToArray(selection, "selection")
 
-        if type(offset) is not types.IntType or offset < 0:
+        if type(offset) is not int or offset < 0:
             raise SPARQLError("'offset' argument is invalid")
 
         if limit != None:
-            if type(limit) is not types.IntType or limit < 0:
+            if type(limit) is not int or limit < 0:
                 raise SPARQLError("'offset' argument is invalid")
 
         if orderBy != None:
@@ -1557,14 +1558,13 @@ class SPARQLQueryResult(Result):
             # self.bindings = [ dict( [ (v, b.get(v)) for v in self.vars ] ) for b in topUnion ]
 
             if len(self.vars) == 1:
-                self.bindings = [dict(zip(self.vars, [b])) for b in result]
+                self.bindings = [dict(list(zip(self.vars, [b]))) for b in result]
 
             else:
-                self.bindings = [dict(zip(self.vars, b)) for b in result]
+                self.bindings = [dict(list(zip(self.vars, b))) for b in result]
 
             # remove rows where all bindings are None
-            self.bindings = filter(
-                    lambda x: x.values() != [None]*len(x), self.bindings)
+            self.bindings = [x for x in self.bindings if list(x.values()) != [None]*len(x)]
 
         else:
             self.graph = qResult

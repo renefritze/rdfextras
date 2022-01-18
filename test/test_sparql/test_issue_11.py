@@ -20,7 +20,7 @@ class TestIssue11(unittest.TestCase):
     sparql = True
     
     def setUp(self):
-        NS = u"http://example.org/"
+        NS = "http://example.org/"
         self.graph = ConjunctiveGraph()
         self.graph.parse(data=testgraph, format="n3", publicID=NS)
 

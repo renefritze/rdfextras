@@ -1,7 +1,7 @@
 from rdflib.graph import ConjunctiveGraph
 from rdflib.term import URIRef, Literal
 from rdflib.namespace import RDFS
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 testContent = """
@@ -15,7 +15,7 @@ testContent = """
     
 doc1 = URIRef("http://eikeon.com/")
 
-QUERY = u"""
+QUERY = """
 PREFIX foaf:   <http://xmlns.com/foaf/0.1/>
 SELECT ?X
 WHERE { 
@@ -34,7 +34,7 @@ class TestSparqlOPT_FILTER2(unittest.TestCase):
         results = self.graph.query(QUERY,
                                    DEBUG=False)
         results = list(results)
-        self.failUnless(
+        self.assertTrue(
             results == [(doc1,)],
             "expecting : %s .  Got: %s"%([(doc1,)],repr(results)))
 

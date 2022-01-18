@@ -18,4 +18,4 @@ if __name__ == "__main__":
     p = parse(query)
     tmp = p.query.whereClause.parsedGraphPattern
     if str(tmp) == correct:
-        print "PASSED"
+        print("PASSED")

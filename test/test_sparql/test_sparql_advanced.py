@@ -2,7 +2,7 @@ import doctest
 from rdflib.namespace import RDF, RDFS, Namespace
 from rdflib.term import Variable
 from rdflib.graph import Graph
-from cStringIO import StringIO
+from io import StringIO
 
 import rdflib
 
@@ -44,13 +44,13 @@ def describeOverride(terms,bindings,graph):
             g.add((s,p,o))
     return g
 
-namespaces={u'rdfs' : RDF,
-            u'rdf'  : RDFS,
-            u'foaf' : FOAF,
-            u'vcard': VCARD,
-            u'ex' : Namespace('http://example.org/person#') }
+namespaces={'rdfs' : RDF,
+            'rdf'  : RDFS,
+            'foaf' : FOAF,
+            'vcard': VCARD,
+            'ex' : Namespace('http://example.org/person#') }
 
-for prefix,uri in namespaces.items():
+for prefix,uri in list(namespaces.items()):
     testGraph.namespace_manager.bind(prefix, uri, override=False)        
 
 if __name__ == "__main__":

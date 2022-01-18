@@ -46,7 +46,7 @@ class Unbound:
         :param name: the name of the variable (without the '?' character)
         :type name: unicode or string
         """
-        if isinstance(name, basestring):
+        if isinstance(name, str):
             self.name = _questChar + name
             self.origName = name
         else:
@@ -138,17 +138,17 @@ def convertTerm(term, queryProlog):
             else:
 
                 if queryProlog.baseDeclaration \
-                      and u'' in queryProlog.prefixBindings \
-                      and queryProlog.prefixBindings[u'']:
+                      and '' in queryProlog.prefixBindings \
+                      and queryProlog.prefixBindings['']:
                     base = URIRef(Resolver(
-                            ).normalize(queryProlog.prefixBindings[u''],
+                            ).normalize(queryProlog.prefixBindings[''],
                                         queryProlog.baseDeclaration))
 
                 elif queryProlog.baseDeclaration:
                     base = queryProlog.baseDeclaration
 
                 else:
-                    base = queryProlog.prefixBindings[u'']
+                    base = queryProlog.prefixBindings['']
 
                 return URIRef(Resolver().normalize(term.localname, base))
 
@@ -329,8 +329,8 @@ def mapToOperator(expr, prolog, combinationArg=None, constraint=False):
     and combinator expressions) into strings of their Python equivalent
     """
     if prolog.DEBUG:
-        print('''mapToOperator:\n\texpr=%s,\n\ttype=%s,\n\tconstr=%s.\n''' % (
-            expr, type(expr), constraint))
+        print(('''mapToOperator:\n\texpr=%s,\n\ttype=%s,\n\tconstr=%s.\n''' % (
+            expr, type(expr), constraint)))
 
     combinationInvokation = combinationArg and '(%s)' % combinationArg or ""
 
@@ -396,7 +396,7 @@ def mapToOperator(expr, prolog, combinationArg=None, constraint=False):
         else:
             return "'%s'" % convertTerm(expr, prolog)
 
-    elif isinstance(expr, basestring):
+    elif isinstance(expr, str):
         return "'%s'" % convertTerm(expr, prolog)
 
     elif isinstance(expr, ParsedAdditiveExpressionList):
@@ -455,8 +455,8 @@ def createSPARQLPConstraint(filter, prolog):
                     or filter.filter
 
     if prolog.DEBUG:
-        print("createSPARQLPConstraint reducedFilter=%s, type=%s" % (
-            reducedFilter, type(reducedFilter)))
+        print(("createSPARQLPConstraint reducedFilter=%s, type=%s" % (
+            reducedFilter, type(reducedFilter))))
 
     if isinstance(reducedFilter, (ListRedirect,
                                   BinaryOperator,
@@ -473,8 +473,8 @@ def createSPARQLPConstraint(filter, prolog):
         const = True
 
     if prolog.DEBUG:
-        print("createSPARQLPConst: reducedFilterType = %s, constraint = %s" % (
-            type(reducedFilter), const))
+        print(("createSPARQLPConst: reducedFilterType = %s, constraint = %s" % (
+            type(reducedFilter), const)))
 
     if isinstance(reducedFilter, ParsedConditionalAndExpressionList):
 
@@ -484,7 +484,7 @@ def createSPARQLPConstraint(filter, prolog):
                 for expr in reducedFilter]))
 
         if prolog.DEBUG:
-            print("a. sparql-p operator(s): %s" % combinationLambda)
+            print(("a. sparql-p operator(s): %s" % combinationLambda))
         return eval(combinationLambda)
 
     elif isinstance(reducedFilter, ParsedRelationalExpressionList):
@@ -495,7 +495,7 @@ def createSPARQLPConstraint(filter, prolog):
                 for expr in reducedFilter]))
 
         if prolog.DEBUG:
-            print("b. sparql-p operator(s): %s" % combinationLambda)
+            print(("b. sparql-p operator(s): %s" % combinationLambda))
         return eval(combinationLambda)
 
     elif isinstance(reducedFilter, BuiltinFunctionCall):
@@ -503,7 +503,7 @@ def createSPARQLPConstraint(filter, prolog):
                             constraint=const)
 
         if prolog.DEBUG:
-            print("c. sparql-p operator(s): %s" % rt)
+            print(("c. sparql-p operator(s): %s" % rt))
         return eval(rt)
 
     elif isinstance(reducedFilter, (
@@ -514,7 +514,7 @@ def createSPARQLPConstraint(filter, prolog):
                               constraint=const))
 
         if prolog.DEBUG:
-            print("d. sparql-p operator(s): %s" % rt)
+            print(("d. sparql-p operator(s): %s" % rt))
         return eval(rt)
 
     elif isinstance(reducedFilter, Variable):
@@ -522,7 +522,7 @@ def createSPARQLPConstraint(filter, prolog):
         rt = """operators.EBV(rdflib.Variable("%s"))""" % reducedFilter.n3()
 
         if prolog.DEBUG:
-            print("e. sparql-p operator(s): %s" % rt)
+            print(("e. sparql-p operator(s): %s" % rt))
         return eval(rt)
 
         # reducedFilter = BuiltinFunctionCall(BOUND,reducedFilter)
@@ -533,19 +533,19 @@ def createSPARQLPConstraint(filter, prolog):
 
     else:
 
-        if reducedFilter == u'true' or reducedFilter == u'false':
+        if reducedFilter == 'true' or reducedFilter == 'false':
             def trueFn(arg):
                 return True
 
             def falseFn(arg):
                 return False
-            return reducedFilter == u'true' and trueFn or falseFn
+            return reducedFilter == 'true' and trueFn or falseFn
 
         rt = mapToOperator(reducedFilter, prolog,
                             constraint=const)
 
         if prolog.DEBUG:
-            print("f. sparql-p operator(s): %s" % rt)
+            print(("f. sparql-p operator(s): %s" % rt))
         return eval(rt)
 
 

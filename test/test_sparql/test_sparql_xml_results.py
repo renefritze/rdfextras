@@ -74,7 +74,7 @@ class TestSparqlXmlResults(unittest.TestCase):
             # print(frag, result_xml)
             if frag.startswith(b('<sparql:result>')):
                 raise SkipTest("False negative.")
-            self.failUnless(frag in result_xml)
+            self.assertTrue(frag in result_xml)
 
 
 def normalize(s, exp=re.compile(b(r'\s+'), re.MULTILINE)):

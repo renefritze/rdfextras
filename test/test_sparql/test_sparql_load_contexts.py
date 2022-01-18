@@ -1,8 +1,8 @@
-from urllib2 import URLError
+from urllib.error import URLError
 try:
     from Ft.Lib import UriException
 except:
-    from urllib2 import URLError as UriException
+    from urllib.error import URLError as UriException
 import unittest
 from rdflib import ConjunctiveGraph, URIRef
 
@@ -22,5 +22,5 @@ class SPARQLloadContextsTest(unittest.TestCase):
         graph.get_context(URIRef('http://test/')
                             ).parse("http://www.w3.org/People/Berners-Lee/card.rdf")
         r = graph.query(querystr, loadContexts=True)
-        self.assert_(len(r.bindings) is not 0)
+        self.assertTrue(len(r.bindings) is not 0)
 

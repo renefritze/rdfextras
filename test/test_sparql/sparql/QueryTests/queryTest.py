@@ -7,7 +7,7 @@
 """
 
 """
-import sys, os, time, datetime, imp, sys, StringIO
+import sys, os, time, datetime, imp, sys, io
 
 sys.path.insert(0,"../")
 
@@ -53,7 +53,7 @@ def run(modName) :
                 if rdfData == None :
                         tripleStore = retrieveRDFFiles(fils)
                 else :
-                        stream = StringIO.StringIO(rdfData)
+                        stream = io.StringIO(rdfData)
                         tripleStore = sparqlGraph.SPARQLGraph()
                         tripleStore.parse(FileInputSource(stream),format="xml")
 
@@ -65,34 +65,34 @@ def run(modName) :
 
 
         ###############################################		
-        print "\n============= Test Module: %s =============" % modName			
+        print("\n============= Test Module: %s =============" % modName)			
         # better test modules describe their expected results...
         try :
                 expected = defs["expected"]
-                print "expected: %s" % expected
-                print "=======\n"
+                print("expected: %s" % expected)
+                print("=======\n")
         except :
                 pass
 
         # Run the query and print the results						
         results = tripleStore.query(select,pattern,optPattern)
         num = len(results)
-        print "Number of hits: %d" % num
-        print
+        print("Number of hits: %d" % num)
+        print()
         for i in range(0,num) :
                 hit = results[i]
                 if len(select) == 1 :
-                        print "%s: %s" % (select[0],hit)
+                        print("%s: %s" % (select[0],hit))
                 else :
                         for j in range(0,len(select)) :
                                 var = select[j]
                                 val = hit[j]
-                                print "%s: %s" % (var,val)
-                        print
+                                print("%s: %s" % (var,val))
+                        print()
 
 if __name__ == '__main__' :
         if len(sys.argv) == 1 :
-                print "Usage: %s modname1 modname2 ..." % sys.argv[0]
+                print("Usage: %s modname1 modname2 ..." % sys.argv[0])
         else :
                 for mod in sys.argv[1:] :
                         if mod.endswith(".py") :

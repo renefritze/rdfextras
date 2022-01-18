@@ -15,7 +15,7 @@ except NameError:
 
 import os
 import logging
-from cStringIO import StringIO
+from io import StringIO
 import unittest
 from nose.exc import SkipTest
 from glob import glob
@@ -160,11 +160,11 @@ RESULT_NS = Namespace(
         'http://www.w3.org/2001/sw/DataAccess/tests/result-set#'
 )
 manifestNS = {
-    u"rdfs": Namespace(
+    "rdfs": Namespace(
                 "http://www.w3.org/2000/01/rdf-schema#"),
-    u"mf"  : Namespace(
+    "mf"  : Namespace(
                 "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#"),
-    u"qt"  : Namespace(
+    "qt"  : Namespace(
                 "http://www.w3.org/2001/sw/DataAccess/tests/test-query#"),
 }
 EARL = Namespace("http://www.w3.org/ns/earl#")
@@ -199,7 +199,7 @@ def trialAndErrorRTParse(graph,queryLoc,DEBUG):
     try:
         graph.parse(qstr,format='n3')
         return True
-    except Exception, e:
+    except Exception as e:
         if DEBUG:
             log.debug(e)
             log.debug("#### Parse Failure (N3) ###")
@@ -209,7 +209,7 @@ def trialAndErrorRTParse(graph,queryLoc,DEBUG):
             graph.parse(qstr)
             assert list(graph.objects(None,RESULT_NS.resultVariable))
             return True
-        except Exception, e:
+        except Exception as e:
             if DEBUG:
                 log.debug(e)
                 log.debug("#### Parse Failure (RDF/XML) ###")
@@ -304,7 +304,7 @@ def generictest(testFile):
             log.debug(open(expectedRT).read())
             store.rollback()
             store.close()
-        if testFile in tests2Skip.keys():
+        if testFile in list(tests2Skip.keys()):
             log.debug("Skipping test (%s) %s\n" % \
                         (testFile, tests2Skip[testFile]))
             raise SkipTest("Skipping test (%s) %s\n" % \
@@ -367,7 +367,7 @@ def test_cases():
         os.chdir(os.getcwd()+'/test/test_sparql/DAWG')
     for idx, testFile in enumerate(glob('data-r2/*/*.rq')): #[40:50]):
         g = generictest
-        g.__name__ = g.__doc__ = g.func_name = g.id = \
+        g.__name__ = g.__doc__ = g.__name__ = g.id = \
             'test.test_sparql.' + \
                 testFile[8:-3].translate(maketrans('-/','__'))
         yield g, testFile

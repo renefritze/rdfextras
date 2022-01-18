@@ -1,4 +1,4 @@
-import pathutils
-import cmdlineutils
-import termutils
-import graphutils
+from . import pathutils
+from . import cmdlineutils
+from . import termutils
+from . import graphutils

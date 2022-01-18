@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from cStringIO import StringIO
+from io import StringIO
 from rdflib import URIRef
 from rdflib.graph import Graph, ConjunctiveGraph
 # from optparse import OptionParser
@@ -45,11 +45,11 @@ class AbstractSPARQLUnitTestCase(unittest.TestCase):
         else:
             self.graph = Graph(store)
         if self.TEST_FACT:
-            print self.graph.store
+            print(self.graph.store)
             self.graph = Graph(self.graph.store)
-            print "Parsed %s facts for test (as %s)"%(len(self.graph.parse(self.TEST_FACT,
+            print("Parsed %s facts for test (as %s)"%(len(self.graph.parse(self.TEST_FACT,
                                                                           format=self.TEST_FACT_FORMAT)),
-                                                      self.TEST_FACT_FORMAT)
+                                                      self.TEST_FACT_FORMAT))
 
 BROKEN_OPTIONAL=\
 """
@@ -87,8 +87,8 @@ class TestOPTVariableCorrelationTest(AbstractSPARQLUnitTestCase):
                                  processor="sparql",
                                  DEBUG=self.debug))
         self.assertEqual(len(rt),1)
-        print("rt[0]", rt[0])
-        self.failUnless(rt[0][0]==URIRef('http://example.org/interval3'),
+        print(("rt[0]", rt[0]))
+        self.assertTrue(rt[0][0]==URIRef('http://example.org/interval3'),
                         "ex:interval3 is the only other interval that preceded interval1")
 
 #This master list of unit tests needs to be updated as more are added

@@ -1,5 +1,5 @@
 import unittest
-from StringIO import StringIO
+from io import StringIO
 from rdflib.graph import ConjunctiveGraph
 import rdflib
 

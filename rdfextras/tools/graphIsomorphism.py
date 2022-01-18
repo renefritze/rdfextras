@@ -35,7 +35,7 @@ class IsomorphicTestableGraph(Graph):
                 yield tuple(self.vhashtriple(t, term, done))
 
     def vhashtriple(self, triple, term, done):
-        for p in xrange(3):
+        for p in range(3):
             if not isinstance(triple[p], BNode):
                 yield triple[p]
             elif done or (triple[p] == term):

@@ -15,7 +15,7 @@ NATIVE_REGEX = 0
 #Store uses python's re module internally for REGEX matching (SQLite for instance)
 PYTHON_REGEX = 1
 
-class REGEXTerm(unicode):
+class REGEXTerm(str):
     """
     REGEXTerm can be used in any term slot and is interpreted as a request to
     perform a REGEX match (not a string comparison) using the value
@@ -25,7 +25,7 @@ class REGEXTerm(unicode):
         self.compiledExpr = re.compile(expr)
 
     def __reduce__(self):
-        return (REGEXTerm, (unicode(''),))
+        return (REGEXTerm, (str(''),))
 
 def regexCompareQuad(quad,regexQuad):
     for index in range(4):

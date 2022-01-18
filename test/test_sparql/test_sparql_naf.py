@@ -1,7 +1,7 @@
 from rdflib.graph import ConjunctiveGraph
 from rdflib.term import URIRef
 from rdflib.namespace import RDFS
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import rdflib
@@ -17,7 +17,7 @@ testContent = """
 doc1 = URIRef("http://example.org/doc/1")
 doc2 = URIRef("http://example.org/doc/2")
 
-QUERY = u"""
+QUERY = """
 SELECT ?X
 WHERE { 
     ?X ?label "Document 1".
@@ -32,8 +32,8 @@ class TestSparqlOPT_FILTER(unittest.TestCase):
         results = self.graph.query(QUERY,
                                    DEBUG=False,
                                    initBindings={'?label':RDFS.label})
-        print results.vars
-        self.failUnless(list(results) == [(doc2,)],
+        print(results.vars)
+        self.assertTrue(list(results) == [(doc2,)],
                 "expecting : %s, got %s"%(repr([(doc2,)]), repr(list(results))))
 
 if __name__ == "__main__":

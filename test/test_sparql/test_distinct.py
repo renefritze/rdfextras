@@ -1,5 +1,5 @@
 from rdflib.graph import ConjunctiveGraph
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import rdflib
@@ -52,18 +52,18 @@ class Query(unittest.TestCase):
 
     def testQuery1(self):
         r=list(self.graph.query(test_query_literal))
-        print r
+        print(r)
         self.assertEqual(len(r), 1)
 
     def testQuery2(self):
         r=list(self.graph.query(test_query_resource))
-        print r
+        print(r)
         self.assertEqual(len(r), 1)
 
 
     def testQuery3(self):
         r=list(self.graph.query(test_query_order))
-        print r
+        print(r)
         self.assertEqual(list(r), [(Literal("Carol"), ), (Literal("Emerson"),)])
 
 if __name__ == "__main__":

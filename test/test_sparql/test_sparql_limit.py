@@ -4,7 +4,7 @@ from rdflib import plugin
 from rdflib.graph import ConjunctiveGraph
 from rdflib.term import Literal
 from rdflib.store import Store
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 
@@ -59,7 +59,7 @@ class TestLimit(unittest.TestCase):
         graph = ConjunctiveGraph(plugin.get('IOMemory',Store)())
         graph.parse(data=test_data, format="n3")
         results = graph.query(test_query,DEBUG=False)
-        print len(results)
+        print(len(results))
         self.assertEqual(len(results), 2)
         
     def testLimit2(self):

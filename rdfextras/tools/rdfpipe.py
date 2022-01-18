@@ -47,7 +47,7 @@ def parse_and_serialize(input_files, input_format, guess,
     store.open(store_conn)
     graph = Graph(store)
 
-    for prefix, uri in ns_bindings.items():
+    for prefix, uri in list(ns_bindings.items()):
         graph.namespace_manager.bind(prefix, uri, override=False)
 
     for fpath in input_files:

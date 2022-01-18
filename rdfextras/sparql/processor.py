@@ -23,11 +23,11 @@ class Processor(Processor):
               dSCompliance=False,
               loadContexts=False):
 
-        initNs.update({u'rdfs':RDFS.uri, u'owl':str(OWL), u'rdf':RDF.uri})
+        initNs.update({'rdfs':RDFS.uri, 'owl':str(OWL), 'rdf':RDF.uri})
 
-        assert isinstance(strOrQuery, (basestring, Query)),"%s must be a string or an rdfextras.sparql.components.Query instance"%strOrQuery
+        assert isinstance(strOrQuery, (str, Query)),"%s must be a string or an rdfextras.sparql.components.Query instance"%strOrQuery
 
-        if isinstance(strOrQuery, basestring):
+        if isinstance(strOrQuery, str):
             strOrQuery = rdfextras.sparql.parser.parse(strOrQuery)
 
         if not strOrQuery.prolog:
@@ -35,7 +35,7 @@ class Processor(Processor):
             strOrQuery.prolog.prefixBindings.update(initNs)
 
         else:
-            for prefix, nsInst in initNs.items():
+            for prefix, nsInst in list(initNs.items()):
                 if prefix not in strOrQuery.prolog.prefixBindings:
                     strOrQuery.prolog.prefixBindings[prefix] = nsInst
 

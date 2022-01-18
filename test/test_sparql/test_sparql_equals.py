@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 from rdflib.graph import ConjunctiveGraph
 from rdflib.term import URIRef
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import rdflib

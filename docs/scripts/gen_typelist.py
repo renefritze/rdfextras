@@ -4,31 +4,31 @@ from gen_oplist import print_title, print_hline
 
 def print_file(file):
 
-    print >>file, '.. _typelist:\n\n'
+    print('.. _typelist:\n\n', file=file)
 
     print_title(file, "Type List", "~", "~")
 
-    print >>file, "*THIS PAGE IS A PLACEHOLDER: WRITEME*"
-    print >>file, ""
+    print("*THIS PAGE IS A PLACEHOLDER: WRITEME*", file=file)
+    print("", file=file)
     print_hline(file)
 
-    print >>file, ""
-    print >>file, ".. contents::"
-    print >>file, ""
+    print("", file=file)
+    print(".. contents::", file=file)
+    print("", file=file)
 
     print_title(file, "Type Classes", '=')
 
-    print >>file, "- scalar.Scalar\n"
-    print >>file, "- tensor.Tensor\n"
-    print >>file, "- sparse.Sparse\n"
+    print("- scalar.Scalar\n", file=file)
+    print("- tensor.Tensor\n", file=file)
+    print("- sparse.Sparse\n", file=file)
 
     print_title(file, "Type Instances", '=')
 
-    print >>file, "- scalar.int8\n"
-    print >>file, "- tensor.lvector\n"
-    print >>file, "- sparse.??\n"
+    print("- scalar.int8\n", file=file)
+    print("- tensor.lvector\n", file=file)
+    print("- sparse.??\n", file=file)
 
-    print >>file, ""
+    print("", file=file)
 
 
 if __name__ == '__main__':

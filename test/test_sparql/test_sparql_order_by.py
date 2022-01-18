@@ -2,7 +2,7 @@ from rdflib.graph import ConjunctiveGraph
 from rdflib import plugin, query
 from rdflib.term import Literal
 from rdflib.store import Store
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 
@@ -32,7 +32,7 @@ class TestOrderBy(unittest.TestCase):
         graph.parse(StringIO(test_data), format="n3")
         results = graph.query(test_query)
 
-        self.failUnless(False not in [r[0] == a for r, a in zip(results, ['Alice', 'Bob', 'Charlie', 'Dave'])])
+        self.assertTrue(False not in [r[0] == a for r, a in zip(results, ['Alice', 'Bob', 'Charlie', 'Dave'])])
 
 if __name__ == "__main__":
     unittest.main()

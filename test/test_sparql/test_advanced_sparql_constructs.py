@@ -3,7 +3,7 @@ from rdflib import plugin
 from rdflib.namespace import Namespace,RDF,RDFS
 from rdflib.term import URIRef
 from rdflib.store import Store
-from cStringIO import StringIO
+from io import StringIO
 from rdflib import Graph
 
 import rdflib
@@ -73,20 +73,20 @@ class AdvancedTests(unittest.TestCase):
         # see https://github.com/RDFLib/rdfextras/issues/27
         OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
         rt =  self.testGraph.query(sparqlQ4)
-        self.assertEquals(set(rt),set((x,) for x in [OWL_NS.DatatypeProperty, OWL_NS.ObjectProperty, OWL_NS.OntologyProperty,OWL_NS.Class,OWL_NS.Ontology,OWL_NS.AnnotationProperty,RDF.Property,RDFS.Class]))
+        self.assertEqual(set(rt),set((x,) for x in [OWL_NS.DatatypeProperty, OWL_NS.ObjectProperty, OWL_NS.OntologyProperty,OWL_NS.Class,OWL_NS.Ontology,OWL_NS.AnnotationProperty,RDF.Property,RDFS.Class]))
 
     def testScopedBNodes(self):
         rt =  self.testGraph.query(sparqlQ1)
-        self.assertEquals(list(rt)[0][0],URIRef("http://test/foo"))
+        self.assertEqual(list(rt)[0][0],URIRef("http://test/foo"))
 
     def testCollectionContentWithinAndWithout(self):
         rt =  self.testGraph.query(sparqlQ3)
-        self.assertEquals(list(rt)[0][0],URIRef("http://test/bar"))
+        self.assertEqual(list(rt)[0][0],URIRef("http://test/bar"))
 
     def testCollectionAsObject(self):
         rt =  self.testGraph.query(sparqlQ2)
-        self.assertEquals(list(rt)[0][0],URIRef("http://test/foo"))
-        self.assertEquals(1,len(rt))
+        self.assertEqual(list(rt)[0][0],URIRef("http://test/foo"))
+        self.assertEqual(1,len(rt))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AdvancedTests)

@@ -1,6 +1,6 @@
 from rdflib.graph import ConjunctiveGraph
 from rdflib.term import Literal
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import rdflib
@@ -30,7 +30,7 @@ class TestSparqlJsonResults(unittest.TestCase):
 
     def test_base_ref(self):
         rt=list(self.graph.query(test_query))
-        self.failUnless(rt[0][0] == Literal("Alice"),"Expected:\n 'Alice' \nGot:\n %s" % rt)
+        self.assertTrue(rt[0][0] == Literal("Alice"),"Expected:\n 'Alice' \nGot:\n %s" % rt)
 
 if __name__ == "__main__":
     unittest.main()

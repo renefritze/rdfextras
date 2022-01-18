@@ -394,7 +394,7 @@ class _ApiDocWriter(object):
         ad += '\n\n.. currentmodule:: ' + uri + '\n\n'
 
         if self.autosummary and len(modules + functions 
-                                    + classes.keys() + interfaces.keys()):
+                                    + list(classes.keys()) + list(interfaces.keys())):
             ad += "\n.. autosummary::\n"
             ad += "\n"
             ad += "\n".join(
@@ -405,7 +405,7 @@ class _ApiDocWriter(object):
             ad += "\n"
 
         has_inheritance = False
-        for _c in classes.values() + interfaces.values():
+        for _c in list(classes.values()) + list(interfaces.values()):
             for _b in _c.__bases__:
                 if _b is object:
                     continue
@@ -712,7 +712,7 @@ class ApiDocWriter(_ApiDocWriter):
                     "Module %s does not define '__all__': " % uri +
                     "(Generated docs will included all imported objects too!)")
             __dict__ = getattr(module, '__dict__', {})
-        except Exception, err:
+        except Exception as err:
             logger = logging.getLogger("mmf.sphinx.ext.apigen")
             logger.warning("Could not import - " + uri)
             exc_type, exc_value, exc_traceback = sys.exc_info()

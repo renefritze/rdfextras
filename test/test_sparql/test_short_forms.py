@@ -36,7 +36,7 @@ class TestSPARQLAbbreviations(unittest.TestCase):
     sparql = True
 
     def setUp(self):
-        NS = u"http://example.org/"
+        NS = "http://example.org/"
         self.graph = Graph(store)
         self.graph.parse(StringInputSource(b("""
            @prefix    : <http://example.org/> .
@@ -47,33 +47,33 @@ class TestSPARQLAbbreviations(unittest.TestCase):
 
     def testTypeAbbreviation(self):
         query = """SELECT ?subj WHERE { ?subj a rdfs:Class }"""
-        print query
+        print(query)
         rt = self.graph.query(query,DEBUG=debug)
-        self.failUnless(len(rt) == 1,"Should be a single match: %s"%len(rt))
+        self.assertTrue(len(rt) == 1,"Should be a single match: %s"%len(rt))
         query = """SELECT ?subj WHERE { ?subj a <http://www.w3.org/2000/01/rdf-schema#Class> }"""
-        print query
+        print(query)
         rt = self.graph.query(query,DEBUG=debug)
-        self.failUnless(len(rt) == 1,"Should be a single match: %s"%len(rt))
+        self.assertTrue(len(rt) == 1,"Should be a single match: %s"%len(rt))
         
     def testTypeAbbreviation(self):
         query = """SELECT ?subj WHERE { ?subj a rdfs:Class }"""
-        print query
+        print(query)
         rt = self.graph.query(query,DEBUG=debug)
-        self.failUnless(len(rt) == 1,"Should be a single match: %s"%len(rt))
+        self.assertTrue(len(rt) == 1,"Should be a single match: %s"%len(rt))
         query = """SELECT ?subj WHERE { ?subj a <http://www.w3.org/2000/01/rdf-schema#Class> }"""
-        print query
+        print(query)
         rt = self.graph.query(query,DEBUG=debug)
-        self.failUnless(len(rt) == 1,"Should be a single match: %s"%len(rt))
+        self.assertTrue(len(rt) == 1,"Should be a single match: %s"%len(rt))
 
     def testQNameVSFull(self):
         query = """SELECT ?subj WHERE { ?subj <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> rdfs:Class }"""
-        print query
+        print(query)
         rt = self.graph.query(query,DEBUG=debug)
-        self.failUnless(len(rt) == 1,"Should be a single matchL: %s"%len(rt))
+        self.assertTrue(len(rt) == 1,"Should be a single matchL: %s"%len(rt))
         query = """SELECT ?subj WHERE { ?subj <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> }"""
-        print query
+        print(query)
         rt = self.graph.query(query,DEBUG=debug)
-        self.failUnless(len(rt) == 1,"Should be a single match: %s"%len(rt))
+        self.assertTrue(len(rt) == 1,"Should be a single match: %s"%len(rt))
         
     def tearDown(self):
         self.graph.store.rollback()

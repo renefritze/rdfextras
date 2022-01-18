@@ -4,7 +4,7 @@ try:
 except ImportError:
   from nose import SkipTest
   raise SkipTest('pydot required but not installed')
-from StringIO import StringIO
+from io import StringIO
 from rdfextras.utils import graphutils
 from rdflib.graph import Graph
 
@@ -53,7 +53,7 @@ class TestUtilN3toDot(unittest.TestCase):
     def test_util_graph_to_dot(self):
         res = graphutils.graph_to_dot(self.graph, self.dot)
         res = self.dot.to_string()
-        self.assert_('swap/Primer#Person' in res, res)
+        self.assertTrue('swap/Primer#Person' in res, res)
 
 if __name__ == "__main__":
     unittest.main()

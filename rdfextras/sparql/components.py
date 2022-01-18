@@ -161,11 +161,11 @@ class ParsedAdditiveExpressionList(ListRedirect):
         return self._list == other._list
 
 
-class ParsedString(unicode):
+class ParsedString(str):
 
     def __new__(cls, value=None):
-        value = value is None and u"" or value
-        return unicode.__new__(cls, value)
+        value = value is None and "" or value
+        return str.__new__(cls, value)
 
 
 class ParsedDatatypedLiteral(object):
@@ -560,9 +560,9 @@ class QName(Identifier):
 
     def __new__(cls, value):
         try:
-            inst = unicode.__new__(cls, value)
+            inst = str.__new__(cls, value)
         except UnicodeDecodeError:
-            inst = unicode.__new__(cls, value, 'utf-8')
+            inst = str.__new__(cls, value, 'utf-8')
 
         inst.prefix, inst.localname = value.split(':')
         return inst

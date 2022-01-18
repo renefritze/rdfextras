@@ -2,8 +2,8 @@ from rdflib.term import Literal, BNode, URIRef
 from rdflib.graph import ConjunctiveGraph
 from rdflib.namespace import Namespace
 
-DC = Namespace(u"http://purl.org/dc/elements/1.1/")
-FOAF = Namespace(u"http://xmlns.com/foaf/0.1/")
+DC = Namespace("http://purl.org/dc/elements/1.1/")
+FOAF = Namespace("http://xmlns.com/foaf/0.1/")
 
 graph = ConjunctiveGraph()
 s = BNode()

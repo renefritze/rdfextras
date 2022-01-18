@@ -325,14 +325,14 @@ class IdentifierHash(RelationalHash):
         if self.hashUpdateQueue:
             params = [(md5Int, termType, lexical)
                       for md5Int, (termType, lexical)
-                        in self.hashUpdateQueue.items()
+                        in list(self.hashUpdateQueue.items())
                         if len(self.getRowsByHash(db, md5Int)) == 0]
             if len(params) > 0:
                 c.executemany(
                   "INSERT INTO %s" % (self,) + " VALUES (%s,%s,%s)", params)
             
             if COLLISION_DETECTION:
-                insertedIds = self.hashUpdateQueue.keys()
+                insertedIds = list(self.hashUpdateQueue.keys())
                 if len(insertedIds) > 1:
                     c.execute("SELECT * FROM %s" % \
                             (self)+" WHERE %s" % \
@@ -395,14 +395,14 @@ class LiteralHash(RelationalHash):
         keyCol = self.columns[0][0]
         if self.hashUpdateQueue:
             params = [(md5Int, lexical) for md5Int, lexical
-                        in self.hashUpdateQueue.items()
+                        in list(self.hashUpdateQueue.items())
                         if len(self.getRowsByHash(db, md5Int)) == 0]
             if len(params) > 0:
                 c.executemany(
                   "INSERT INTO %s" % (self,) + " VALUES (%s,%s)", params)
             
             if COLLISION_DETECTION:
-                insertedIds = self.hashUpdateQueue.keys()
+                insertedIds = list(self.hashUpdateQueue.keys())
                 if len(insertedIds) > 1:
                     c.execute("SELECT * FROM %s" % \
                         (self)+" WHERE %s" % \

@@ -2,13 +2,13 @@ import sys
 from nose.exc import SkipTest
 import unittest
 import rdflib
-from StringIO import StringIO
+from io import StringIO
 
 class TestSparqlResultsFormats(unittest.TestCase): 
 
     def _test(self,s,format):
         r = rdflib.query.Result.parse(StringIO(s), format=format)
-        print r.type
+        print(r.type)
         s = r.serialize(format=format)
         #print s
         r2 = rdflib.query.Result.parse(StringIO(s.decode('utf-8')), format=format)
@@ -62,7 +62,7 @@ class TestSparqlResultsFormats(unittest.TestCase):
         self._test(xmlres,"xml")
 
     def testjson(self):
-        jsonres=u"""{
+        jsonres="""{
    "head": {
        "link": [
            "http://www.w3.org/TR/rdf-sparql-XMLres/example.rq"

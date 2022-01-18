@@ -10,17 +10,17 @@ def print_title(file, title_string, under_char, over_char=''):
 
     l = len(title_string)
     if over_char:
-        print >>file, over_char * l
+        print(over_char * l, file=file)
 
-    print >>file, title_string
+    print(title_string, file=file)
 
     if under_char:
-        print >>file, under_char * l
+        print(under_char * l, file=file)
 
-    print >>file, ""
+    print("", file=file)
 
 def print_hline(file):
-    print >>file, '-' * 80
+    print('-' * 80, file=file)
 
 class Entry:
     """Structure for generating the oplist file"""
@@ -57,14 +57,14 @@ class Entry:
 
                 if c == '\n':
                     if debug:
-                        print >> sys.stderr, 'breaking'
+                        print('breaking', file=sys.stderr)
                     break
                 if c in '\t*`': 
                     c = ' ';
                 r.append(c)
 
             if debug: 
-                print >> sys.stderr, r
+                print(r, file=sys.stderr)
 
             return "".join(r)
 
@@ -143,41 +143,41 @@ def print_entries(file, ops, constructors):
         if len(tagged_ops):
             print_title(file, 'Op Classes', '-')
             for op in tagged_ops:
-                print >>file, "- %s" % op.apilink
-                print >>file, "  %s" % op.mini_desc()
-                print >>file, ""
+                print("- %s" % op.apilink, file=file)
+                print("  %s" % op.mini_desc(), file=file)
+                print("", file=file)
 
         tagged_ops = [op for op in tags[t] if isinstance(op, EntryConstructor)]
         if len(tagged_ops):
             print_title(file, 'Op Constructors', '-')
             for op in tagged_ops:
-                print >>file, "- %s" % op.apilink
-                print >>file, "  %s" % op.mini_desc()
-                print >>file, ""
+                print("- %s" % op.apilink, file=file)
+                print("  %s" % op.mini_desc(), file=file)
+                print("", file=file)
 
 
 def print_file(file):
 
-    print >>file, '.. _oplist:\n\n'
+    print('.. _oplist:\n\n', file=file)
 
     print_title(file, "Op List", "~", "~")
-    print >>file, """
+    print("""
 This page lists the `Op Classes` and `constructors` that are provided by the Theano library.
 `Op Classes` drive from :api:`Op`, whereas `constructors` are typically `Op Class` instances, but may be true Python functions.
 
 In the future, this list may distinguish `constructors` that are Op instances from true Python functions.
 
-"""
+""", file=file)
     print_hline(file)
-    print >>file, ""
-    print >>file, ".. contents:: "
-    print >>file, ""
+    print("", file=file)
+    print(".. contents:: ", file=file)
+    print("", file=file)
 
     ops, constructors = search_entries([theano])
 
     print_entries(file, ops, constructors)
 
-    print >>file, ""
+    print("", file=file)
     
 
 import theano

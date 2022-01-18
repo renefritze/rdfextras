@@ -481,7 +481,7 @@ class BinaryRelationPartition(Table):
         whereClauses = []
         whereParameters = []
         asserted = dereferenceQuad(CONTEXT,queryPattern) is None
-        for idx in SlotPrefixes.keys():
+        for idx in list(SlotPrefixes.keys()):
             queryTerm = dereferenceQuad(idx,queryPattern)
             lookupAlias = 'rt_'+SlotPrefixes[idx]
             if idx == CONTEXT and asserted:
@@ -713,7 +713,7 @@ class NamedLiteralProperties(BinaryRelationPartition):
         self.idHash.insertIdentifiers(db)
         self.valueHash.insertIdentifiers(db)
         cursor = db.cursor()
-        for key,paramList in self.pendingInsertions.items():
+        for key,paramList in list(self.pendingInsertions.items()):
             if paramList:
                 cursor.executemany(self.insertSQLCmds[key],paramList)
         cursor.close()
@@ -858,7 +858,7 @@ class NamedBinaryRelations(BinaryRelationPartition):
                                            (objSlot.term,objSlot.termType),
                                            (conSlot.term,conSlot.termType)])
 
-def BinaryRelationPartitionCoverage((subject,predicate,object_,context),BRPs):
+def BinaryRelationPartitionCoverage(xxx_todo_changeme,BRPs):
     """
     This function takes a quad pattern (where any term is one of:
     URIRef,BNode,Literal,None,or REGEXTerm) ,a list of 3 live partitions and
@@ -872,6 +872,7 @@ def BinaryRelationPartitionCoverage((subject,predicate,object_,context),BRPs):
     literal values). Given the nature of the REGEX function in SPARQL and the
     way Versa matches by REGEX, this seperation couldn't be done
     """
+    (subject,predicate,object_,context) = xxx_todo_changeme
     if isinstance(predicate,list) and len(predicate) == 1:
         predicate = predicate[0]
     if isinstance(predicate,REGEXTerm):
@@ -1000,13 +1001,13 @@ def PatternResolution(
     try:
         if EXPLAIN_INFO:
             cursor.execute("EXPLAIN "+query,tuple(unionQueriesParams))
-            print query
+            print(query)
             from pprint import pprint
             pprint(cursor.fetchall())
         cursor.execute(query,tuple(unionQueriesParams))
-    except ValueError,e:
-        print "## Query ##\n",query
-        print "## Parameters ##\n",unionQueriesParams
+    except ValueError as e:
+        print("## Query ##\n",query)
+        print("## Parameters ##\n",unionQueriesParams)
         raise e
     if fetchall:
         qRT = cursor.fetchall()

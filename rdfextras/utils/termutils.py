@@ -51,7 +51,7 @@ TERM_COMBINATIONS = dict(
 'sVLU', 'sVLB', 'sVLF', 'sVFU', 'sVFB', 'sVFF'
 ])])
 REVERSE_TERM_COMBINATIONS = dict(
-    [(value, key) for key, value in TERM_COMBINATIONS.items()])
+    [(value, key) for key, value in list(TERM_COMBINATIONS.items())])
 
 TERM_INSTANTIATION_DICT = {
     'U':URIRef,
@@ -175,12 +175,13 @@ def constructGraph(key):
     return GRAPH_TERM_DICT[key]
 
 
-def triplePattern2termCombinations((s,p,o)):
+def triplePattern2termCombinations(xxx_todo_changeme):
     """Maps a triple pattern to term combinations (non-functioning)"""
+    (s,p,o) = xxx_todo_changeme
     combinations=[]
     #combinations.update(TERM_COMBINATIONS)
     if isinstance(o,Literal):
-        for key,val in TERM_COMBINATIONS.items():
+        for key,val in list(TERM_COMBINATIONS.items()):
             if key[OBJECT] == 'O':
                 combinations.append(val)
     return combinations

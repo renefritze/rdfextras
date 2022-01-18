@@ -1,6 +1,6 @@
 from rdflib.graph import ConjunctiveGraph
 from rdflib.term import URIRef, Literal
-from StringIO import StringIO
+from io import StringIO
 
 import rdflib
 
@@ -25,8 +25,8 @@ PROLOGUE = """
 
 def test_filter_by_lang():
     testdata = [
-            ("en", u'"Document 1"@en'),
-            ("sv", u'"Dokument 1"@sv')
+            ("en", '"Document 1"@en'),
+            ("sv", '"Dokument 1"@sv')
         ]
 
     query = PROLOGUE+'''

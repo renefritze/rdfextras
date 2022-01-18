@@ -440,14 +440,14 @@ class TestDAWG_DATASET_COMPLIANCE(unittest.TestCase):
         graph = Graph()
         graph.parse(data=n3data, format='n3')
         res = graph.query(ask_query)
-        self.assert_(res.askAnswer == True, res.askAnswer)
+        self.assertTrue(res.askAnswer == True, res.askAnswer)
 
     def test1_ASK_when_DAWG_DATASET_COMPLIANCE_is_True(self):
         raise SkipTest("known DAWG_DATATSET_COMPLIANCE SPARQL issue")
         graph = Graph()
         graph.parse(data=n3data, format='n3')
         res = graph.query(ask_query,dSCompliance=True)
-        self.assert_(res.askAnswer == True, res.askAnswer)
+        self.assertTrue(res.askAnswer == True, res.askAnswer)
 
     # def test2_ASK_when_DAWG_DATASET_COMPLIANCE_is_False(self):
     #     graph = Graph()

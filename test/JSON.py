@@ -1,6 +1,6 @@
 from rdflib import ConjunctiveGraph, plugin
 from rdflib.store import Store
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 """Tests for JSON Serialization of SPARQL Results"""
@@ -53,7 +53,7 @@ class JSON(unittest.TestCase):
         """
         results = self.graph.query(test_query)
         result_json = results.serialize(format='json')
-        self.failUnless(result_json.find(correct) > 0)
+        self.assertTrue(result_json.find(correct) > 0)
 
     def testHeader(self):
         """
@@ -61,7 +61,7 @@ class JSON(unittest.TestCase):
         """
         results = self.graph.query(test_header_query)
         result_json = results.serialize(format='json')
-        self.failUnless(result_json.find('"x",') == -1)
+        self.assertTrue(result_json.find('"x",') == -1)
         
 if __name__ == "__main__":
     unittest.main()

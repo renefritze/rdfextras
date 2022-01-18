@@ -2,13 +2,13 @@ import sys
 import re
 import csv
 import getopt
-import ConfigParser
+import configparser
 import fileinput
 import codecs
 import time
 import datetime
 import warnings
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 import rdflib
 
@@ -89,11 +89,11 @@ def csv_reader(csv_data, dialect=csv.excel, **kwargs):
                             dialect=dialect, **kwargs)
     for row in csv_reader:
         # decode UTF-8 back to Unicode, cell by cell:
-        yield [unicode(cell, 'utf-8', errors='replace') for cell in row]
+        yield [str(cell, 'utf-8', errors='replace') for cell in row]
 
 def prefixuri(x, prefix, class_=None):
     if prefix: 
-        r=rdflib.URIRef(prefix+urllib2.quote(x.encode("utf8").replace(" ", "_"), safe=""))
+        r=rdflib.URIRef(prefix+urllib.parse.quote(x.encode("utf8").replace(" ", "_"), safe=""))
     else: 
         r=rdflib.URIRef(x)
     uris[x,class_]=(r, class_)
@@ -247,13 +247,13 @@ class CSV2RDF(object):
 
 
         # skip lines at the start
-        for x in range(self.SKIP): csvreader.next()
+        for x in range(self.SKIP): next(csvreader)
 
         # read header line
-        header_labels=list(csvreader.next())                
+        header_labels=list(next(csvreader))                
         headers=dict(enumerate([self.PROPBASE[toProperty(x)] for x in header_labels]))
         # override header properties if some are given
-        for k,v in self.PROPS.iteritems():
+        for k,v in self.PROPS.items():
             headers[k]=v
             header_labels[k]=split_uri[1]
             
@@ -275,7 +275,7 @@ class CSV2RDF(object):
                 if self.IDENT=='auto': 
                     uri=self.BASE["%d"%rows]
                 else:
-                    uri=self.BASE["_".join([urllib2.quote(x.encode("utf8").replace(" ", "_"), safe="") for x in index(l, self.IDENT)])]
+                    uri=self.BASE["_".join([urllib.parse.quote(x.encode("utf8").replace(" ", "_"), safe="") for x in index(l, self.IDENT)])]
 
                 if self.LABEL: 
                     self.triple(uri, RDFS.label, rdflib.Literal(" ".join(index(l, self.LABEL))))
@@ -296,7 +296,7 @@ class CSV2RDF(object):
                             else: 
                                 self.triple(uri, headers[i], o)
 
-                        except Exception, e:
+                        except Exception as e:
                             warnings.warn("Could not process value for column %d:%s in row %d, ignoring: %s "%(i,headers[i],rows, e.message))
 
                 rows+=1
@@ -308,7 +308,7 @@ class CSV2RDF(object):
 
         # output types/labels for generated URIs
         classes=set()
-        for l,x in uris.iteritems(): 
+        for l,x in uris.items(): 
             l,_=l
             u,c=x
             self.triple(u, RDFS.label, rdflib.Literal(l))
@@ -337,11 +337,11 @@ def main():
     opts=dict(opts)
 
     if "-h" in opts or "--help" in opts:
-        print HELP
+        print(HELP)
         sys.exit(-1)
 
     if "-f" in opts: 
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.readfp(open(opts["-f"]))
         for k,v in config.items("csv2rdf"): 
             if k=="out":
@@ -407,7 +407,7 @@ def main():
     if "--class" in opts: 
         csv2rdf.CLASS=rdflib.URIRef(opts["--class"])
 
-    for k,v in opts.iteritems(): 
+    for k,v in opts.items(): 
         if k.startswith("--col"):
             csv2rdf.COLUMNS[int(k[5:])]=column(v)
         elif k.startswith("--prop"):

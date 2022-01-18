@@ -1,5 +1,5 @@
 from rdflib.graph import ConjunctiveGraph
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 import rdflib
@@ -28,7 +28,7 @@ class Query(unittest.TestCase):
         graph.parse(StringIO(test_data), format="n3")
         results = graph.query(test_query)
         
-        self.failUnless(results.bindings[0]["name"]=="Alice")
+        self.assertTrue(results.bindings[0]["name"]=="Alice")
 
 if __name__ == "__main__":
     unittest.main()

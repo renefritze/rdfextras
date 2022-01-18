@@ -22,7 +22,7 @@ class TestSPARQLToldBNodes(unittest.TestCase):
     sparql = True
 
     def setUp(self):
-        NS = u"http://example.org/"
+        NS = "http://example.org/"
         self.graph = Graph(store)
         self.graph.parse(StringInputSource("""
            @prefix    : <http://example.org/> .
@@ -34,23 +34,23 @@ class TestSPARQLToldBNodes(unittest.TestCase):
         for s,p,o in self.graph.triples((None,RDF.type,None)):
             pass
         query = """SELECT ?obj WHERE { %s ?prop ?obj }"""%s.n3()
-        print query
+        print(query)
         rt = self.graph.query(query,DEBUG=debug)
-        print list(rt)
-        self.failUnless(len(rt) == 1,"BGP should only match the 'told' BNode by name (result set size: %s)"%len(rt))
+        print(list(rt))
+        self.assertTrue(len(rt) == 1,"BGP should only match the 'told' BNode by name (result set size: %s)"%len(rt))
         bindings = {Variable('subj'):s}
         query = """SELECT ?obj WHERE { ?subj ?prop ?obj }"""
-        print query
+        print(query)
         rt = self.graph.query(query,initBindings=bindings,DEBUG=debug)
-        self.failUnless(len(rt) == 1,"BGP should only match the 'told' BNode by name (result set size: %s, BNode: %s)"%(len(rt),s.n3()))        
+        self.assertTrue(len(rt) == 1,"BGP should only match the 'told' BNode by name (result set size: %s, BNode: %s)"%(len(rt),s.n3()))        
 
     def testFilterBNode(self):
         for s,p,o in self.graph.triples((None,RDF.type,None)):
             pass        
         query2 = """SELECT ?subj WHERE { ?subj ?prop ?obj FILTER( ?subj != %s ) }"""%s.n3()
-        print query2
+        print(query2)
         rt = self.graph.query(query2,DEBUG=True)
-        self.failUnless(len(rt) == 1,"FILTER should exclude 'told' BNodes by name (result set size: %s, BNode excluded: %s)"%(len(rt),s.n3()))                
+        self.assertTrue(len(rt) == 1,"FILTER should exclude 'told' BNodes by name (result set size: %s, BNode excluded: %s)"%(len(rt),s.n3()))                
 
     def tearDown(self):
         self.graph.store.rollback()

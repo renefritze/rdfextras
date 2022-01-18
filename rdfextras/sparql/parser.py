@@ -39,20 +39,20 @@ if DEBUG:
             pass
 
         def start_action(self, instring, loc, expr):
-            self.writer.startElement(u'attempt', attributes={
-                u'class': unicode(expr.__class__.__name__),
-                u'loc': unicode(repr(loc)), u'expr': unicode(repr(expr)),
-                u'lineno': unicode(lineno(loc, instring)),
-                u'col': unicode(col(loc, instring)),})
+            self.writer.startElement('attempt', attributes={
+                'class': str(expr.__class__.__name__),
+                'loc': str(repr(loc)), 'expr': str(repr(expr)),
+                'lineno': str(lineno(loc, instring)),
+                'col': str(col(loc, instring)),})
 
         def success_action(self, instring, tokensStart, loc, expr, tokens):
-            self.writer.simpleElement(u'success')
-            self.writer.endElement(u'attempt')
+            self.writer.simpleElement('success')
+            self.writer.endElement('attempt')
 
         def exception_action(self, instring, tokensStart, expr, err):
-            self.writer.simpleElement(u'fail', attributes={
-                u'err': unicode(repr(err))})
-            self.writer.endElement(u'attempt')
+            self.writer.simpleElement('fail', attributes={
+                'err': str(repr(err))})
+            self.writer.endElement('attempt')
 
         def set_debug_actions(self, parser):
             parser.setDebugActions(
@@ -63,20 +63,20 @@ if DEBUG:
             apply_to_pyparser_tree(self.parser, self.set_debug_actions)
             self.writer = MarkupWriter(indent='yes', stream=stream)
             self.writer.startDocument()
-            self.writer.startElement(u'trace')
+            self.writer.startElement('trace')
 
             try:
                 result = self.parser.parseString(input)[0]
-            except ParseException, e:
-                self.writer.simpleElement(u'fail', attributes={
-                    u'err': unicode(repr(e))})
+            except ParseException as e:
+                self.writer.simpleElement('fail', attributes={
+                    'err': str(repr(e))})
                 #self.writer.endElement(u'attempt')
-                self.writer.endElement(u'trace')
+                self.writer.endElement('trace')
                 self.writer.endDocument()
 
                 raise
             
-            self.writer.endElement(u'trace')
+            self.writer.endElement('trace')
             self.writer.endDocument()
 
             return result

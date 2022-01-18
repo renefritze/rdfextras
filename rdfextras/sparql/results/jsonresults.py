@@ -1,7 +1,7 @@
 from rdflib.query import Result, ResultException, ResultSerializer, ResultParser
 from rdflib import Literal, URIRef, BNode, Variable
 
-import jsonlayer
+from . import jsonlayer
 
 """A Serializer for SPARQL results in JSON: 
 
@@ -77,7 +77,7 @@ class JSONResult(Result):
         ret = []
         for row in self.json['results']['bindings']:
             outRow = {}
-            for k, v in row.items():
+            for k, v in list(row.items()):
                 outRow[Variable(k)] = parseJsonTerm(v)
             ret.append(outRow)
         return ret
@@ -106,15 +106,15 @@ def parseJsonTerm(d):
 
 def termToJSON(self,term): 
     if isinstance(term, URIRef): 
-        return { 'type': 'uri', 'value': unicode(term) }
+        return { 'type': 'uri', 'value': str(term) }
     elif isinstance(term, Literal):
         if term.datatype!=None:
             return { 'type': 'typed-literal', 
-                     'value': unicode(term), 
-                     'datatype': unicode(term.datatype) }
+                     'value': str(term), 
+                     'datatype': str(term.datatype) }
         else:
             r={'type': 'literal',
-               'value': unicode(term) }
+               'value': str(term) }
             if term.language!=None:
                 r['xml:lang']=term.language
             return r

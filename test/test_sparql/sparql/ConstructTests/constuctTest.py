@@ -7,7 +7,7 @@
 """
 
 """
-import sys, os, time, datetime, imp, sys, StringIO
+import sys, os, time, datetime, imp, sys, io
 sys.path.insert(0,"../")
 
 from testSPARQL import ns_rdf
@@ -53,7 +53,7 @@ def run(modName) :
 
         # Get the final of the triple store...
         if graph == None :
-                stream = FileInputSource(StringIO.StringIO(rdfData))
+                stream = FileInputSource(io.StringIO(rdfData))
                 graph = sparqlGraph.SPARQLGraph()
                 graph.parse(stream,format="xml")
 
@@ -65,20 +65,20 @@ def run(modName) :
 
 
         ###############################################		
-        print "\n============= Test Module: %s =============" % modName			
+        print("\n============= Test Module: %s =============" % modName)			
 
         results     = graph.queryObject(pattern,optPattern)
         graph = results.construct(construct)
         graph.serialize("output.rdf")
 
-        print "=== generated RDF file (output.rdf):\n"
+        print("=== generated RDF file (output.rdf):\n")
         for l in file("output.rdf") :
                 sys.stdout.write(l)
 
 if __name__ == '__main__' :
         if len(sys.argv) == 1 :
                 #print "Usage: %s modname1 modname2 ..." % sys.argv[0]
-                for mod in tests.values():
+                for mod in list(tests.values()):
                         run(mod)
         else :
                 for mod in sys.argv[1:] :

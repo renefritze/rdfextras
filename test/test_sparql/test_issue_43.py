@@ -39,24 +39,24 @@ class TestIssue43(unittest.TestCase):
     known_issue = True
 
     def setUp(self):
-        NS = u"http://example.org/"
+        NS = "http://example.org/"
         self.graph = ConjunctiveGraph()
         self.graph.parse(data=testgraph, format="n3", publicID=NS)
 
     def testSPARQL_disjunction(self):
         rt = self.graph.query(
             disjunctionquery, initNs={'rdf': RDF}, DEBUG=False)
-        self.assertEquals(len(list(rt)), 0)
+        self.assertEqual(len(list(rt)), 0)
 
     def testSPARQL_conjunction(self):
         rt = self.graph.query(
             conjunctionquery, initNs={'rdf': RDF}, DEBUG=False)
-        self.assertEquals(len(list(rt)), 0)
+        self.assertEqual(len(list(rt)), 0)
 
     def testSPARQL_disjunction_with_conjunction(self):
         rt = self.graph.query(
             testquery, initNs={'rdf': RDF}, DEBUG=True)
-        self.assertEquals(len(list(rt)), 0, list(rt))
+        self.assertEqual(len(list(rt)), 0, list(rt))
 
 if __name__ == '__main__':
     TestIssue43.testSPARQL_disjunction_with_conjunction()

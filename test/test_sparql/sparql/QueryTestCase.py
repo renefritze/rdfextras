@@ -12,10 +12,10 @@ class QueryTestCase(unittest.TestCase):
 
     def testUnicodeString(self):
         from rdfextras.sparql.parser import parse
-        from cStringIO import StringIO
+        from io import StringIO
 
         q = \
-          u"""
+          """
           PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
           SELECT ?pred
           WHERE { rdf:foobar rdf:predicate ?pred. }

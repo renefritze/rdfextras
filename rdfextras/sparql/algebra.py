@@ -40,6 +40,7 @@ from rdfextras.sparql.evaluate import unRollTripleItems
 from rdfextras.sparql.graph import BasicGraphPattern
 from rdfextras.sparql.query import _variablesToArray
 import logging
+from functools import reduce
 log = logging.getLogger(__name__)
 
 # A variable to determine whether we obey SPARQL definition of RDF dataset
@@ -220,8 +221,7 @@ def ReduceToAlgebra(left,right):
                                 ParsedAlternativeGraphPattern):
                     #right = Union(..)
                     unionList =\
-                      map(lambda i: reduce(ReduceToAlgebra,i.graphPatterns,None),
-                          right.nonTripleGraphPattern.alternativePatterns)
+                      [reduce(ReduceToAlgebra,i.graphPatterns,None) for i in right.nonTripleGraphPattern.alternativePatterns]
                     right = reduce(Union,unionList)
                 else:
                     raise Exception(right)
@@ -506,7 +506,7 @@ def TopEvaluate(query,dataset,passedBindings = None,DEBUG=False,exportTree=False
                  offset > 0):
                 if prolog.answerList:
                     topUnionBindings = prolog.answerList
-                    vars = prolog.answerList[0].keys()
+                    vars = list(prolog.answerList[0].keys())
                 else:
                     topUnionBindings=[]
 
@@ -567,7 +567,7 @@ def TopEvaluate(query,dataset,passedBindings = None,DEBUG=False,exportTree=False
             # result,selectionF,allVars,orderBy,distinct,topUnion
             return (graph.n3(), [], vars, limit, offset, [])
         import rdflib
-        extensionFunctions = {rdflib.term.URIRef(u'http://www.w3.org/TR/rdf-sparql-query/#describe'): create_result}
+        extensionFunctions = {rdflib.term.URIRef('http://www.w3.org/TR/rdf-sparql-query/#describe'): create_result}
 
         if query.query.solutionModifier.limitClause is not None:
             limit = int(query.query.solutionModifier.limitClause)
@@ -627,8 +627,8 @@ def TopEvaluate(query,dataset,passedBindings = None,DEBUG=False,exportTree=False
         rtGraph=Graph(namespace_manager=dataset.namespace_manager)
         for binding in rt:
             for s,p,o,func in ReduceGraphPattern(query.query.triples,prolog).patterns:
-                s,p,o=map(lambda x:isinstance(x,Variable) and binding.get(x) or
-                                 x,[s,p,o])
+                s,p,o=[isinstance(x,Variable) and binding.get(x) or
+                                 x for x in [s,p,o]]
                 # If any such instantiation produces a triple containing an
                 # unbound variable or an illegal RDF construct, such as a
                 # literal in subject or predicate position, then that triple
@@ -734,44 +734,44 @@ def walktree(top, depthfirst = True, leavesOnly = True, optProxies=False):
             yield top
 
 def print_tree(node, padding=' '):
-    print padding[:-1] + repr(node)
+    print(padding[:-1] + repr(node))
     padding = padding + ' '
     count = 0
     # _children1=reduce(lambda x,y:x+y,list(fetchChildren(node)))
     for child in node.children:# _children1:
         count += 1
-        print padding + '|'
+        print(padding + '|')
         if child.children:
             if count == len(node.children):
                 print_tree(child, padding + ' ')
             else:
                 print_tree(child, padding + '|')
         else:
-            print padding + '+-' + repr(child) + ' ' + repr(dict([(k,v)
-                    for k,v in child.bindings.items() if v]))
+            print(padding + '+-' + repr(child) + ' ' + repr(dict([(k,v)
+                    for k,v in list(child.bindings.items()) if v])))
             optCount=0
             for optTree in child.optionalTrees:
                 optCount += 1
-                print padding + '||'
+                print(padding + '||')
                 if optTree.children:
                     if optCount == len(child.optionalTrees):
                         print_tree(optTree, padding + ' ')
                     else:
                         print_tree(optTree, padding + '||')
                 else:
-                    print padding + '+=' + repr(optTree)
+                    print(padding + '+=' + repr(optTree))
 
     count = 0
     for optTree in node.optionalTrees:
         count += 1
-        print padding + '||'
+        print(padding + '||')
         if optTree.children:
             if count == len(node.optionalTrees):
                 print_tree(optTree, padding + ' ')
             else:
                 print_tree(optTree, padding + '||')
         else:
-            print padding + '+=' + repr(optTree)
+            print(padding + '+=' + repr(optTree))
 
 
 def _ExpandJoin(node,expression,tripleStore,prolog,optionalTree=False):
